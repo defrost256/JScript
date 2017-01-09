@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title> --- </title>
+
+    <!-- html comment ---------------------------------------------------------->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+	<style type="text/css">
+        /* css comment ----------------------------------------------------- */
+        body{
+            font-family: 'Montserrat', sans-serif;
+            margin: 5px;
+            }
+        .line{
+            height: 30px;
+            background-color: #000000;
+            margin-bottom: 2px;
+            padding: 5px;
+            overflow: hidden;
+            clear: both;
+            }
+        
+        .country{
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            }
+        
+        .data{
+            color: white;
+            margin: 5px;
+             }
+        
+        /*------most jön a gombok formázása-------*/
+        
+        .lifeBtn, .wellbeingBtn, .inequalityBtn, .ecologicalBtn, .happyBtn{
+        cursor: pointer;
+        width: auto;
+        padding: 7px;
+        padding-left: 14px;
+        padding-right: 14px;
+        background-color: #FFF;
+        color: black;
+        margin-bottom: 20px;
+        float: left;
+        margin-right: 2px;
+        }
+        
+        .menu{
+        position: fixed;
+        }
+        
+     /*   #container{
+        position: absolute;
+            top: 100;
+            left: 0px;
+        }
+        
+        /*----------*/
+        
+        
+    </style>
+
+    <!-- -- -->
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript">
+	// alert("error")
+        
+        /*
+        js block comment
+        */
+        
+        // line comment
+        
+        var dataJ
+        
+        
+		$(document).ready(function(e){
+        
+            
+    
+         $.getJSON( "dataJson.json" , function(data){
+            
+             dataJ = data  
+             
+             // alert( " siker ! <3 ") // string
+             // alert( data )
+             // alert( data[1] )
+             // alert ( data[0].country ) // név
+             
+             // alert ( data.length ) // output: 140
+             
+        //  for(var i=0 ; i<5 ; i++) {
+              for(var i=0 ; i<data.length ; i++){
+               // alert(i)
+              // alert ( data[i].country)
+              // most jön a html, css...
+                  // [] {}
+             // <div class="country">béla<div>
+               // alert(data[i].ecological) 
+              //     $('#container').append('<div class="line" style="width:'+ ((data[i].ecological*150 +'px;"><div class="country">'+data[i].country+'</div></div>')
+              
+                $('#container').append(
+                    '<div class="line l'+i+'" data-btn="true" style="width:'+ ((data[i].ecological*70)+100) +'px;">'
+                    +'<div class="country">'+data[i].country+'</div>'
+                    +'<div class="data">ecological: '+data[i].ecological+'</div>'
+                    +'</div>')
+              
+             } // end for
+             
+             //-----------------------------------------
+             
+             $('.country').click(function(){
+                 
+              //   $(this).parent().css({)
+               //  alert ($(this).parent().data("btn") == "true")
+                 
+                 if( $(this).parent().data("btn") == true ){
+                     
+                     $(this).parent().animate({
+                     height:100
+                     }, 1000) // end animate
+                     
+                     $(this).parent().data("btn", false)
+                     
+                 }else{
+                     
+                    $(this).parent().animate({
+                        height:30
+                   }, 1000) // end animate 
+                    
+                      $(this).parent().data("btn", true)
+                      }
+               // alert("click")
+                 
+                 
+               }) // end click
+               
+               //----------------------------------------
+             
+         })  // ----------------------------------------------end json
+            
+       //  $( "#sortable" ).sortable();
+    //    $( "#sortable" ).disableSelection(); oldalról kicopyztuk e 2 sort
+        
+         $( "#container" ).sortable();
+        $( "#container" ).disableSelection();
+            
+        //////////////////////////////////////
+            
+        $('.lifeBtn').click(function(){
+            
+            $(this).css({
+                backgroundColor: '#C00',
+                color:'#FFF'
+                })
+            
+            $('.btn').not(this).css({
+                backgroundColor: '#FFF',
+                color:'#000'
+                })
+            
+        // alert("ok") // alert("click")
+        // for(var j=0; j<data.length; j++){
+            for(var j=0; j<dataJ.length; j++){
+           
+                $('.l'+j).animate({
+                    width: (dataJ[j].life*10)+100
+                }, 1000); //end animate
+                
+                $('.l'+j).find('.data').html("life: "+dataJ[j].life )
+            
+            // alert(data)
+            // alert("ok" )
+                 
+                }; // end for
+            
+           // alert("click")
+            
+        }); //// end click
+            
+        $('.wellbeingBtn').click(function(){
+            
+            $(this).css({
+                backgroundColor: '#C00',
+                color:'#FFF'
+                })
+            
+            $('.btn').not(this).css({
+                backgroundColor: '#FFF',
+                color:'#000'
+                })
+
+           for(var j=0; j<dataJ.length; j++){
+
+                $('.l'+j).animate({
+                  width: (dataJ[j].wellbeing*10)+100
+               }, 1000) // end animate
+                
+                $('.l'+j).find('.data').html("wellbeing: "+dataJ[j].wellbeing )
+                   
+              } // end for
+            
+           // alert("click")
+            
+        }); //// end click
+            
+        $('.inequalityBtn').click(function(){
+            
+            $(this).css({
+                backgroundColor: '#C00',
+                color:'#FFF'
+                })
+            
+            $('.btn').not(this).css({
+                backgroundColor: '#FFF',
+                color:'#000'
+                })
+
+           for(var j=0; j<dataJ.length; j++){
+
+                $('.l'+j).animate({
+                  width: (dataJ[j].inequality*10)+100
+               }, 1000) // end animate
+                
+                $('.l'+j).find('.data').html("inequality: "+dataJ[j].inequality )
+                   
+              } // end for
+                     
+        }); //// end click
+            
+            
+        $('.ecologicalBtn').click(function(){
+                 
+            $(this).css({
+                backgroundColor: '#C00',
+                color:'#FFF'
+                })
+            
+            $('.btn').not(this).css({
+                backgroundColor: '#FFF',
+                color:'#000'
+                })
+
+           for(var j=0; j<dataJ.length; j++){
+
+                $('.l'+j).animate({
+                  width: (dataJ[j].ecological*10)+100
+               }, 1000) // end animate
+                
+                $('.l'+j).find('.data').html("ecological: "+dataJ[j].ecological )
+                   
+              } // end for
+                     
+        }); //// end click
+        
+          $('.happyBtn').click(function(){
+              
+            $(this).css({
+                backgroundColor: '#C00',
+                color:'#FFF'
+                })
+            
+            $('.btn').not(this).css({
+                backgroundColor: '#FFF',
+                color:'#000'
+                })
+
+           for(var j=0; j<dataJ.length; j++){
+
+                $('.l'+j).animate({
+                  width: (dataJ[j].happy*10)+100
+               }, 1000) // end animate
+                
+                $('.l'+j).find('.data').html("happy: "+dataJ[j].happy )
+                   
+              } // end for
+                     
+        }); //// end click    
+            
+            
+        ///////////////////////////
+            
+        }); // end ready 
+		
+	</script>
+</head>
+
+<body>
+    
+    <div class="menu">
+    <div class="btn lifeBtn">L I F E</div>
+    <div class="btn wellbeingBtn">W E L L B E I N G</div>
+    <div class="btn inequalityBtn">I N E Q U A L I T Y</div>
+    <div class="btn ecologicalBtn">E C O L O G I C A L</div>
+    <div class="btn happyBtn">H A P P Y</div>
+    </div>
+    
+    <div id="container"></div>
+        <!-- <div class="line" style="width:100px;"></div> -->
+</body>
+</html>
