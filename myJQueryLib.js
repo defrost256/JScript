@@ -12,33 +12,27 @@ function animateText(elem, big) {
     }
     elem.stop(true);
     elem.animate(mainStyle, 200);
-    /*if(elem.queue().length > 1){
-        elem.stop();
-    }*/
     if(next != null){
         next.stop(true);
         next.animate(sideStyle, 200);
-        /*if(next.queue().length > 1){
-            next.stop();
-        }*/
     }
     if(prev != null){
         prev.stop(true);
         prev.animate(sideStyle, 200);
-        /*if(prev.queue().length > 1){
-            prev.stop();
-        }*/
     }
 }
 
-function showCoutryDataGradient(idx)
+function showCountryDataGradient(idx)
 {
     var countryData = jsonData[idx];
     var R = Math.round((countryData.life - marginData.life.min) * 255 / marginData.life.range);
     var G = Math.round((countryData.ecological - marginData.ecological.min) * 255 / marginData.ecological.range);
     var B = Math.round((countryData.happy - marginData.happy.min) * 255 / marginData.happy.range);
-    //alert("R: " + R + " G: " + G + " B: " + B);
-    $("#gradPanel").animate({backgroundImage: "linear-gradient(rgb(" + R + ", 0, 0), rgb(0, " + G + ", 0), rgb(0, 0, " + B + "))"});
+    $(".gradPanel:last-child").css({background: "linear-gradient(rgb(" + R + ", 0, 0), rgb(0, " + G + ", 0), rgb(0, 0, " + B + "))"}).animate({opacity: 1.0}, 500, "swing", function(){
+        $(".gradPanel:nth-last-child(2)").css({background: "linear-gradient(rgb(" + R + ", 0, 0), rgb(0, " + G + ", 0), rgb(0, 0, " + B + "))"});
+        $(".gradPanel:last-child").css("opacity", "0.0");
+    });
+    
 }
 
 $.getJSON("dataJson.json", function(data){
@@ -53,27 +47,18 @@ $.getJSON("dataJson.json", function(data){
 
 
     for(var i = 0; i < data.length; i++){
-        $("#countries").append('<div class="vertical" data-idx="' + i + '">' + data[i].country + '</div>');
-        if(data[i].wellbeing > marginData.wellbeing.max)
-            marginData.wellbeing.max = data[i].wellbeing;
-        if(data[i].wellbeing < marginData.wellbeing.min)
-            marginData.wellbeing.min = data[i].wellbeing;
-        if(data[i].life > marginData.life.max)
-            marginData.life.max = data[i].life;
-        if(data[i].life < marginData.life.min)
-            marginData.life.min = data[i].life;
-        if(data[i].inequality > marginData.inequality.max)
-            marginData.inequality.max = data[i].inequality;
-        if(data[i].inequality < marginData.inequality.min)
-            marginData.inequality.min = data[i].inequality;
-        if(data[i].ecological > marginData.ecological.max)
-            marginData.ecological.max = data[i].ecological;
-        if(data[i].ecological < marginData.ecological.min)
-            marginData.ecological.min = data[i].ecological;
-        if(data[i].happy > marginData.happy.max)
-            marginData.happy.max = data[i].happy;
-        if(data[i].happy < marginData.happy.min)
-            marginData.happy.min = data[i].happy;
+        var currentData = data[i];
+        $("#countries").append('<div class="vertical" data-idx="' + i + '">' + currentData.country + '</div>');
+        marginData.wellbeing.max = Math.max(currentData.wellbeing, marginData.wellbeing.max);
+        marginData.wellbeing.min = Math.min(currentData.wellbeing, marginData.wellbeing.min);
+        marginData.life.max = Math.max(currentData.life, marginData.life.max);
+        marginData.life.min = Math.min(currentData.life, marginData.life.min);
+        marginData.inequality.max = Math.max(currentData.inequality, marginData.inequality.max);
+        marginData.inequality.min = Math.min(currentData.inequality, marginData.inequality.min);
+        marginData.ecological.max = Math.max(currentData.ecological, marginData.ecological.max);
+        marginData.ecological.min = Math.min(currentData.ecological, marginData.ecological.min);
+        marginData.happy.max = Math.max(currentData.happy, marginData.happy.max);
+        marginData.happy.min = Math.min(currentData.happy, marginData.happy.min);
     }
     marginData.wellbeing.range = marginData.wellbeing.max - marginData.wellbeing.min;
     marginData.happy.range = marginData.happy.max - marginData.happy.min;

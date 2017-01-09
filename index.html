@@ -20,18 +20,36 @@
             font-size: 16px;
             padding: 2px;
             cursor: pointer;
-            z-index: 2;
             background-color: rgba(50, 50, 50, 0.2);
         }
         
-        #gradPanel
+        #countries
         {
-            background-image: linear-gradient(red, yellow, green);
+            z-index: 3;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+        
+        .gradPanel
+        {
+            background: linear-gradient(red, yellow, green);
             height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0px;
+            left: 0px;
             padding: 0px;
             margin: 0px;
             border: 0px;
             z-index: 1;
+        }
+        
+        .gradPanel:last-child
+        {
+            background: linear-gradient(green, red, yellow);
+            z-index: 2;
+            opacity: 0.0;
         }
     </style>
     
@@ -44,9 +62,7 @@
         $(document).ready(function () {
             
             $("div.vertical").hover(function(){animateText($(this), true);}, function(){animateText($(this), false);});
-            //$("div.vertical").on("mouseenter", function(){animateText($(this), true);});
-            //$("div.vertical").on("mouseleave", function(){animateText($(this), false);});
-            $("[data-idx]").click(function(){showCoutryDataGradient($(this).attr("data-idx"));});
+            $("[data-idx]").click(function(){showCountryDataGradient($(this).attr("data-idx"));});
             $("body").disableSelection();
         });
 
@@ -58,6 +74,7 @@
     <div id="countries">
         
     </div>
-    <div id="gradPanel"></div>
+    <div class="gradPanel"></div>
+    <div class="gradPanel"></div>
 </body>
 </html>
