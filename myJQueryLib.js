@@ -1,11 +1,10 @@
-var jsonData;
+//---- Global constants ----
 var AverageData = {
     wellbeing: 5.4,
     life: 70.9,
     inequality: 23,
     ecological: 3.3
 };
-
 var GoodColors = {
     wellbeing: "rgb(231, 130, 117)",
     life: "white",
@@ -18,6 +17,9 @@ var BadColors = {
     inequality: "rgb(49, 39, 131)",
     ecological: "rgb(47, 36, 72)"
 }
+//---- Global Variables ----
+var jsonData;
+
 
 //Use zoom instead?
 function animateText(elem, big) {
@@ -40,6 +42,28 @@ function animateText(elem, big) {
     if(prev != null && !prev.hasClass("compared")){
         prev.stop(true);
         prev.animate(sideStyle, 200);
+    }
+}
+
+function resetBG()
+{
+    $(".gradPanel").removeAttr("style");
+}
+
+function onClickCountry(elem)
+{
+    var idx = elem.attr("data-idx");
+    if(!elem.hasClass("compared")){
+        elem.addClass("compared");
+        showCountryDataGradient(idx);
+    }
+    else{
+        elem.removeClass("compared");
+        var nextBG = $(".compared").get(0);
+        if(nextBG == undefined)
+            resetBG();
+        else
+            showCountryDataGradient(nextBG.getAttribute("data-idx"));
     }
 }
 
@@ -69,6 +93,12 @@ $.getJSON("dataJson.json", function(data){
             inequality: currentData.inequality < AverageData.inequality,
             ecological: currentData.ecological < AverageData.ecological
         });
-        $("#countries").append('<div class="vertical" data-idx="' + i + '">' + currentData.country + '</div>');
     }
+    jsonData.sort(function(a, b){
+        if(a.country < b.country) return -1;
+        if(b.country < a.country) return 1;
+        return 0;
+    });
+    for(var i = 0; i < jsonData.length; i++)
+        $("#countries").append('<div class="vertical" data-idx="' + i + '">' + jsonData[i].country + '</div>');
 });

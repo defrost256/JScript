@@ -41,7 +41,7 @@
         
         .gradPanel
         {
-            background: linear-gradient(white, rgb(231,130,117), rgb(228,181,0), rgb(121,150,0));
+            background: rgb(233, 233, 233);
             height: 100vh;
             width: 100vw;
             position: absolute;
@@ -71,8 +71,7 @@
             
             $("div.vertical:not(.compared)").hover(function(){animateText($(this), true);}, function(){animateText($(this), false);});
             $("[data-idx]").click(function(){
-                $(this).addClass("compared");
-                showCountryDataGradient($(this).attr("data-idx"));
+                onClickCountry($(this));
             });
             $("body").disableSelection();
         });
