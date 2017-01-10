@@ -3,28 +3,26 @@ var marginData;
 
 //Use zoom instead?
 function animateText(elem, big) {
-    var mainStyle = {fontSize: "1.6vw", opacity: 1.0/*, padding: "0.4vw"*/}, sideStyle = {fontSize: "1vw", opacity: 0.7/*, padding: "0.25vw"*/};
+    var mainStyle = {fontSize: "1.6vw", opacity: 1.0}, sideStyle = {fontSize: "1vw", opacity: 0.7};
     var next = elem.next();
     var prev = elem.prev();
     if (!big) {
-        mainStyle = {fontSize: "0.4vw", opacity: 0.2/*, padding: "0.1vw"*/};
-        sideStyle = {fontSize: "0.4vw", opacity: 0.2/*, padding: "0.1vw"*/};
+        mainStyle = {fontSize: "0.4vw", opacity: 0.2};
+        sideStyle = {fontSize: "0.4vw", opacity: 0.2};
     }
-    elem.stop(true);
-    elem.animate(mainStyle, 200);
-    if(next != null && next.attr("compared") != true){
+    if(!elem.hasClass("compared"))
+    {
+        elem.stop(true);
+        elem.animate(mainStyle, 200);
+    }
+    if(next != null && !next.hasClass("compared")){
         next.stop(true);
         next.animate(sideStyle, 200);
     }
-    if(prev != null && prev.attr("compared") != true){
+    if(prev != null && !prev.hasClass("compared")){
         prev.stop(true);
         prev.animate(sideStyle, 200);
     }
-}
-
-function applyComparedCSS(elem)
-{
-    
 }
 
 function showCountryDataGradient(idx)

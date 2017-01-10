@@ -69,9 +69,9 @@
         
         $(document).ready(function () {
             
-            $("div.vertical:not([compared=true])").hover(function(){animateText($(this), true);}, function(){animateText($(this), false);});
+            $("div.vertical:not(.compared)").hover(function(){animateText($(this), true);}, function(){animateText($(this), false);});
             $("[data-idx]").click(function(){
-                applyComparedCSS($(this));
+                $(this).addClass("compared");
                 showCountryDataGradient($(this).attr("data-idx"));
             });
             $("body").disableSelection();
