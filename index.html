@@ -16,22 +16,28 @@
         
         div.vertical
         {
-	    margin-top: 10px;
+	        margin-top: 10px;
             writing-mode: vertical-rl;
             float: left;
-            font-size: 16px;
+            font-size: 8px;
             padding: 2px;
             cursor: pointer;
-            background-color: rgba(50, 50, 50, 0.2);
+            opacity: 0.2;
+        }
+        
+        [compared=true]
+        {
+            font-size: "25px";
+            opacity: 1.0;
         }
         
         #countries
         {
-            z-index: 3;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-        }
+           z-index: 3;
+           position: absolute;
+           top: 0px;
+           left: 0px;
+        }  
         
         .gradPanel
         {
@@ -63,8 +69,11 @@
         
         $(document).ready(function () {
             
-            $("div.vertical").hover(function(){animateText($(this), true);}, function(){animateText($(this), false);});
-            $("[data-idx]").click(function(){showCountryDataGradient($(this).attr("data-idx"));});
+            $("div.vertical:not([compared=true])").hover(function(){animateText($(this), true);}, function(){animateText($(this), false);});
+            $("[data-idx]").click(function(){
+                showCountryDataGradient($(this).attr("data-idx"));
+                $(this).attr("compared", !$(this).attr("compared"));
+            });
             $("body").disableSelection();
         });
 

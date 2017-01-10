@@ -3,20 +3,20 @@ var marginData;
 
 //Use zoom instead?
 function animateText(elem, big) {
-    var mainStyle = {fontSize: "25px", backgroundColor: "rgba(50, 50, 50, 0.5)"}, sideStyle = {fontSize: "20px", backgroundColor: "rgba(50, 50, 50, 0.3)"};
+    var mainStyle = {fontSize: "25px", opacity: 1.0}, sideStyle = {fontSize: "17px", opacity: 0.7};
     var next = elem.next();
     var prev = elem.prev();
     if (!big) {
-        mainStyle = {fontSize: "16px", backgroundColor: "rgba(50, 50, 50, 0.2)"};
-        sideStyle = {fontSize: "16px", backgroundColor: "rgba(50, 50, 50, 0.2)"};
+        mainStyle = {fontSize: "8px", opacity: 0.2};
+        sideStyle = {fontSize: "8px", opacity: 0.2};
     }
     elem.stop(true);
     elem.animate(mainStyle, 200);
-    if(next != null){
+    if(next != null && next.attr("compared") != true){
         next.stop(true);
         next.animate(sideStyle, 200);
     }
-    if(prev != null){
+    if(prev != null && prev.attr("compared") != true){
         prev.stop(true);
         prev.animate(sideStyle, 200);
     }
