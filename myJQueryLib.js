@@ -20,13 +20,13 @@ var BadColors = {
 //---- Global Variables ----
 var jsonData;
 var selectedCountries = [];
+var filterFlags = 15;
 var clicked = false;
 
 function recalcBGParams() {
     "use strict";
     var i, c, pos, width;
     selectedCountries.sort(function (a, b) { return a.idx - b.idx; });
-    console.log(selectedCountries);
     for (i = selectedCountries.length - 1; i >= 0; i--) {
         c = selectedCountries[i];
         pos = i == 0 ? 0 : c.elem.position().left;
@@ -47,8 +47,6 @@ function animateBG() {
     var i, c;
     for (i = 0; i < selectedCountries.length; i++) {
         c = selectedCountries[i];
-        console.log(i);
-        console.log(c);
         if (c.dirty) {
             c.bg.animate({left: "" + c.pos + "px", width: "" + c.width + "px"});
             c.dirty = false;
@@ -84,11 +82,6 @@ function animateText(elem, big) {
     }
 }
 
-function resetBG() {
-    "use strict";
-    $(".gradPanel").removeAttr("style");
-}
-
 function addCountry(idx) {
     "use strict";
     var cIdx = selectedCountries.findIndex(function (a) {return a.idx === idx; }),
@@ -97,7 +90,12 @@ function addCountry(idx) {
         wellbeingColor = c.data.wellbeing ? GoodColors.wellbeing : BadColors.wellbeing,
         inequalityColor = c.data.inequality ? GoodColors.inequality : BadColors.inequality,
         ecologicalColor = c.data.ecological ? GoodColors.ecological : BadColors.ecological,
-        gradBG = "linear-gradient(" + lifeColor + "," + wellbeingColor + "," + inequalityColor + "," + ecologicalColor + ")";
+        gradBG = "linear-gradient(" +
+            (filterFlags & 1 ? (lifeColor + ",") : "") +
+            (filterFlags & 2 ? (wellbeingColor + ",") : "") +
+            (filterFlags & 4 ? (inequalityColor + ",") : "") +
+            (filterFlags & 8 ? (ecologicalColor + ",") : "");
+    gradBG = gradBG.substr(0, gradBG.length - 1) + ")";
 
     $("#countries").css("z-index", "" + (selectedCountries.length + 2));
     $(".background").append('<div class="gradPanel"><div class="gradText">' + c.data.country + '</div></div>');
@@ -108,17 +106,14 @@ function addCountry(idx) {
         background: gradBG,
         zIndex: "" + (selectedCountries.length - cIdx + 1)
     });
+}
 
-    /*var countryData = jsonData[idx],
-        lifeColor = countryData.life ? GoodColors.life : BadColors.life,
-        wellbeingColor = countryData.wellbeing ? GoodColors.wellbeing : BadColors.wellbeing,
-        inequalityColor = countryData.inequality ? GoodColors.inequality : BadColors.inequality,
-        ecologicalColor = countryData.ecological ? GoodColors.ecological : BadColors.ecological,
-        gradBG = "linear-gradient(" + lifeColor + "," + wellbeingColor + "," + inequalityColor + "," + ecologicalColor + ")";
-
-    $(".background").append('<div class="gradPanel">' + countryData.country + '</div>');
-    var lastBG = $(".background .gradPanel:last-child");
-    lastBG.css({background: gradBG}); */
+function onClickFilter(elem) {
+    var sel = elem.attr("selected"), idx = elem.data("idx");
+    console.log(elem);
+    console.log(idx);
+    elem.attr("selected", !sel);
+    filterFlags = filterFlags + (sel ? -(1 << idx): (1 << idx));
 }
 
 function onClickCountry(elem) {

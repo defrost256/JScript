@@ -70,6 +70,42 @@
             top: 50%;
             margin-top: -0.5em;
         }
+
+        #filterButtons
+        {
+            z-index: 3;
+            position: relative;
+            display: -webkit-flex;
+            display: flex;
+            justify-content: space-between;
+            -webkit-justify-content: space-between;
+            width: 80vw;
+            top: 95vh;
+            margin-left: 10vw;
+            margin-right: 10vw;
+            vertical-align: middle;
+        }
+
+        .filter
+        {
+            flex-grow: 1;
+            background: rgba(0, 0, 0, 0);
+            border-style: none;
+            font-family: 'Droid Serif', serif;
+            font-size: 1vw;
+            font-weight: bold;
+        }
+
+        .filter:not([selected])
+        {
+            opacity: 0.4;
+        }
+
+        .btnIcon{
+            width: 2vw;
+            height: 2vw;
+        }
+
     </style>
     
     
@@ -81,9 +117,12 @@
         $(document).ready(function () {
             
             $("div.vertical:not(.compared)").hover(function(){animateText($(this), true);}, function(){animateText($(this), false);});
-            $("[data-idx]").click(function(){
+            $(".vertical").click(function(){
                 onClickCountry($(this));
             });
+            $(".filter").click(function(){
+                onClickFilter($(this));
+            })
             $("body").disableSelection();
         });
 
@@ -97,6 +136,24 @@
     </div>
     <div class="background">
 
+    </div>
+    <div id="filterButtons">
+        <label for="lifeBtn">
+            <input type="button" data-idx="0" id="lifeBtn" class="filter" value="life expectancy" selected="true">
+            <img class="btnIcon" src="buttons/life%20expectancy.png">
+        </label>
+        <label for="wellBtn">
+            <input type="button" data-idx="1" id="wellBtn" class="filter" value="wellbeing" selected="true">
+            <img class="btnIcon" src="buttons/wellbeing.png">
+        </label>
+        <label for="ineqBtn">
+            <input type="button" data-idx="2" id="ineqBtn" class="filter" value="inequality" selected="true">
+            <img class="btnIcon" src="buttons/inequality.png">
+        </label>
+        <label for="ecoBtn">
+            <input type="button" data-idx="3" id="ecoBtn" class="filter" value="ecological footprint" selected="true">
+            <img class="btnIcon" src="buttons/ecologicalfootprint.png">
+        </label>
     </div>
 </body>
 </html>
