@@ -29,7 +29,7 @@ function recalcBGParams() {
     console.log(selectedCountries);
     for (i = selectedCountries.length - 1; i >= 0; i--) {
         c = selectedCountries[i];
-        pos = c.elem.position().left;
+        pos = i == 0 ? 0 : c.elem.position().left;
         width = (i < selectedCountries.length - 1) ? selectedCountries[i + 1].pos - pos : $(".background").width() - pos;
         if (c.pos !== pos || c.width !== width) {
             c.pos = pos;
@@ -56,12 +56,6 @@ function animateBG() {
     }
 }
 
-function onMouseLeaveCountries(e) {
-    if(clicked) {
-
-    }
-}
-
 //Use zoom instead?
 function animateText(elem, big) {
     "use strict";
@@ -75,7 +69,10 @@ function animateText(elem, big) {
     }
     if (!elem.hasClass("compared")) {
         elem.stop(true);
-        elem.animate(mainStyle, 200);
+        elem.animate(mainStyle, 200, "swing", function(){
+            recalcBGParams();
+            animateBG();
+        });
     }
     if (next !== null && !next.hasClass("compared")) {
         next.stop(true);
