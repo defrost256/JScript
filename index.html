@@ -60,13 +60,15 @@
             top: 0px;
             position: absolute;
             text-align: center;
-            vertical-align: middle;
         }
 
-        span.gradText
+        .gradText
         {
-            display: inline;
-            height: 100%;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 50%;
+            margin-top: -0.5em;
         }
     </style>
     
@@ -82,6 +84,7 @@
             $("[data-idx]").click(function(){
                 onClickCountry($(this));
             });
+            $("#countries").on("mouseout", onMouseLeaveCountries);
             $("body").disableSelection();
         });
 

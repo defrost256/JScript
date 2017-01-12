@@ -25,7 +25,8 @@ var clicked = false;
 function recalcBGParams() {
     "use strict";
     var i, c, pos, width;
-    selectedCountries.sort(function (a, b) { return a - b; });
+    selectedCountries.sort(function (a, b) { return a.idx - b.idx; });
+    console.log(selectedCountries);
     for (i = selectedCountries.length - 1; i >= 0; i--) {
         c = selectedCountries[i];
         pos = c.elem.position().left;
@@ -44,14 +45,20 @@ function recalcBGParams() {
 function animateBG() {
     "use strict";
     var i, c;
-    for (i = 1; i < selectedCountries.length; i++) {
+    for (i = 0; i < selectedCountries.length; i++) {
         c = selectedCountries[i];
-        /*console.log(i);
-        console.log(c);*/
+        console.log(i);
+        console.log(c);
         if (c.dirty) {
             c.bg.animate({left: "" + c.pos + "px", width: "" + c.width + "px"});
             c.dirty = false;
         }
+    }
+}
+
+function onMouseLeaveCountries(e) {
+    if(clicked) {
+
     }
 }
 
@@ -68,15 +75,7 @@ function animateText(elem, big) {
     }
     if (!elem.hasClass("compared")) {
         elem.stop(true);
-        if (big || !clicked) {
-            elem.animate(mainStyle, 200);
-        } else {
-            elem.animate(mainStyle, 200, "swing", function () {
-                recalcBGParams();
-                animateBG();
-                clicked = false;
-            });
-        }
+        elem.animate(mainStyle, 200);
     }
     if (next !== null && !next.hasClass("compared")) {
         next.stop(true);
@@ -104,7 +103,7 @@ function addCountry(idx) {
         gradBG = "linear-gradient(" + lifeColor + "," + wellbeingColor + "," + inequalityColor + "," + ecologicalColor + ")";
 
     $("#countries").css("z-index", "" + (selectedCountries.length + 2));
-    $(".background").append('<div class="gradPanel"><span class="gradText">' + c.data.country + '</span></div>');
+    $(".background").append('<div class="gradPanel"><div class="gradText">' + c.data.country + '</div></div>');
     c.bg = $(".background .gradPanel:last-child");
     console.log("" + (cIdx < selectedCountries.length - 1 ? selectedCountries[cIdx + 1].pos : $(".background").width()) + "px");
     c.bg.css({
@@ -148,9 +147,9 @@ function onClickCountry(elem) {
         recalcBGParams();
         removed[0].bg.remove();
         delete removed[0];
-        clicked = true;
     }
     animateBG();
+    clicked = true;
 }
 
 $.getJSON("dataJson.json", function (data) {
