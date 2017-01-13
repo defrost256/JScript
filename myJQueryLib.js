@@ -90,6 +90,11 @@ function animateText(elem, big) {
     }
 }
 
+function hammingD4bit(a) {
+    a = (a & 5) + ((a >> 1) & 5);
+    return (a & 3) + ((a >> 2) & 3);
+}
+
 function addCountry(idx) {
     "use strict";
     var cIdx = selectedCountries.findIndex(function (a) {return a.idx === idx; }),
@@ -98,17 +103,37 @@ function addCountry(idx) {
         wellbeingColor = c.data.wellbeing ? GoodColors.wellbeing : BadColors.wellbeing,
         inequalityColor = c.data.inequality ? GoodColors.inequality : BadColors.inequality,
         ecologicalColor = c.data.ecological ? GoodColors.ecological : BadColors.ecological,
+        gradBG;
+    if(hammingD4bit(filterFlags) > 1) {
         gradBG = "linear-gradient(" +
             (filterFlags & 1 ? (lifeColor + ",") : "") +
             (filterFlags & 2 ? (wellbeingColor + ",") : "") +
             (filterFlags & 4 ? (inequalityColor + ",") : "") +
             (filterFlags & 8 ? (ecologicalColor + ",") : "");
-    gradBG = gradBG.substr(0, gradBG.length - 1) + ")";
-
+        gradBG = gradBG.substr(0, gradBG.length - 1) + ")";
+    } else {
+        switch(filterFlags){
+            case 0:
+                gradBG = "rgb(233,233,233)";
+                break;
+            case 1:
+                gradBG = lifeColor;
+                break;
+            case 2:
+                gradBG = wellbeingColor;
+                break;
+            case 4:
+                gradBG = inequalityColor;
+                break;
+            case 8:
+                gradBG = ecologicalColor;
+                break;
+        }
+    }
+    console.log(gradBG);
     $("#countries").css("z-index", "" + (selectedCountries.length + 2));
     $(".background").append('<div class="gradPanel"><div class="gradText">' + c.data.country + '</div></div>');
     c.bg = $(".background .gradPanel:last-child");
-    console.log("" + (cIdx < selectedCountries.length - 1 ? selectedCountries[cIdx + 1].pos : $(".background").width()) + "px");
     c.bg.css({
         left: "" + (cIdx < selectedCountries.length - 1 ? selectedCountries[cIdx + 1].pos : $(".background").width()) + "px",
         background: gradBG,
@@ -118,8 +143,6 @@ function addCountry(idx) {
 
 function onClickFilter(elem) {
     var sel = elem.attr("selected"), idx = elem.data("idx");
-    console.log(elem);
-    console.log(idx);
     elem.attr("selected", !sel);
     filterFlags = filterFlags + (sel ? -(1 << idx): (1 << idx));
 }
