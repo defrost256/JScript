@@ -30,7 +30,7 @@ function recalcBGParams() {
     for (i = selectedCountries.length - 1; i >= 0; i--) {
         c = selectedCountries[i];
         pos = i == 0 ? 0 : c.elem.position().left;
-        width = (i < selectedCountries.length - 1) ? selectedCountries[i + 1].pos - pos : $(".background").width() - pos;
+        width = (i < selectedCountries.length - 1) ? selectedCountries[i + 1].pos - pos + 5 : $(".background").width() - pos;
         if (c.pos !== pos || c.width !== width) {
             c.pos = pos;
             c.width = width;
@@ -48,6 +48,7 @@ function animateBG() {
     for (i = 0; i < selectedCountries.length; i++) {
         c = selectedCountries[i];
         if (c.dirty) {
+            c.bg.stop(true);
             c.bg.animate({left: "" + c.pos + "px", width: "" + c.width + "px"});
             c.dirty = false;
         }
@@ -67,18 +68,25 @@ function animateText(elem, big) {
     }
     if (!elem.hasClass("compared")) {
         elem.stop(true);
-        elem.animate(mainStyle, 200, "swing", function(){
+        elem.animate(mainStyle, 200);
+    }
+    if (next !== null && !next.hasClass("compared")) {
+        next.stop(true);
+        next.animate(sideStyle, 200, "swing", function(){
             recalcBGParams();
             animateBG();
         });
     }
-    if (next !== null && !next.hasClass("compared")) {
-        next.stop(true);
-        next.animate(sideStyle, 200);
-    }
     if (prev !== null && !prev.hasClass("compared")) {
         prev.stop(true);
-        prev.animate(sideStyle, 200);
+        if(next != null) {
+            prev.animate(sideStyle, 200);
+        } else {
+            prev.animate(sideStyle, 200, "swing", function(){
+                recalcBGParams();
+                animateBG();
+            });
+        }
     }
 }
 
